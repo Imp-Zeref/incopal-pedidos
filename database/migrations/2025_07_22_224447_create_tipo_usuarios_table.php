@@ -6,21 +6,24 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
-        Schema::create('usuarios', function (Blueprint $table) {
+        Schema::create('tipo_usuarios', function (Blueprint $table) {
             $table->id();
             $table->string('nome')->unique();
-            $table->string('password');
-            $table->boolean('bloqueado')->default(false);
-            $table->foreignId('fk_tipo_usuario')->constrained('tipo_usuarios');
-            $table->rememberToken();
+            $table->string('descricao')->nullable();
             $table->timestamps();
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
-        Schema::dropIfExists('usuarios');
+        Schema::dropIfExists('tipo_usuarios');
     }
 };
