@@ -16,7 +16,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class PedidoController extends Controller
 {
     use AuthorizesRequests;
-    
+
     public function index(Request $request)
     {
         $usuario = $request->user();
@@ -37,21 +37,39 @@ class PedidoController extends Controller
     {
         $clientes = Cliente::orderBy('nome')->get();
         $tiposPedido = TipoPedido::all();
+        $produtosDisponiveis = Produto::orderBy('nome')->get();
 
-        return view('pedidos.create', compact('clientes', 'tiposPedido'));
+        return view('pedidos.create', compact('clientes', 'tiposPedido', 'produtosDisponiveis'));
     }
 
     public function store(StorePedidoRequest $request)
     {
         $dadosValidados = $request->validated();
 
-        $dadosValidados['fk_usuario'] = $request->user()->id;
-        $dadosValidados['urgente'] = $request->has('urgente');
+        $pedidoData = [
+            'fk_cliente' => $dadosValidados['fk_cliente'] ?? null,
+            'fk_tipo_pedido' => $dadosValidados['fk_tipo_pedido'],
+            'dt_previsao' => $dadosValidados['dt_previsao'] ?? null,
+            'observacao' => $dadosValidados['observacao'] ?? null,
+            'urgente' => $request->has('urgente'),
+            'fk_usuario' => $request->user()->id,
+            'fk_status_pedido' => StatusPedido::where('nome', 'Pendente')->firstOrFail()->id,
+        ];
 
-        $statusPendente = StatusPedido::where('nome', 'Pendente')->firstOrFail();
-        $dadosValidados['fk_status_pedido'] = $statusPendente->id;
+        $pedido = Pedido::create($pedidoData);
 
-        $pedido = Pedido::create($dadosValidados);
+        if ($request->has('produtos')) {
+            $statusPendenteProduto = StatusProdutoPedido::where('nome', 'Pendente')->firstOrFail();
+
+            foreach ($request->produtos as $produtoData) {
+                if (!empty($produtoData['produto_id']) && !empty($produtoData['quantidade'])) {
+                    $pedido->produtos()->attach($produtoData['produto_id'], [
+                        'quantidade' => $produtoData['quantidade'],
+                        'fk_status_produto' => $statusPendenteProduto->id
+                    ]);
+                }
+            }
+        }
 
         return redirect()->route('pedidos.show', $pedido)->with('sucesso', 'Pedido criado com sucesso!');
     }

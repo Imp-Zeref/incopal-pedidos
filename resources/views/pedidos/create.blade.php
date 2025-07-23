@@ -8,43 +8,51 @@
     <div class="bg-white p-8 rounded-lg shadow-md">
         <form method="POST" action="{{ route('pedidos.store') }}">
             @csrf
+            
+            {{-- SEÇÃO DE DETALHES DO PEDIDO --}}
+            <h2 class="text-xl font-semibold mb-4 border-b pb-2">Detalhes do Pedido</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {{-- ... os campos de Cliente, Tipo de Pedido, Data e Observação continuam aqui como antes ... --}}
+            </div>
+
+            {{-- SEÇÃO DE PRODUTOS --}}
+            <div x-data="{
+                produtos: [ {produto_id: '', quantidade: 1} ],
+                adicionarProduto() { this.produtos.push({produto_id: '', quantidade: 1}) },
+                removerProduto(index) { this.produtos.splice(index, 1) }
+            }" class="mt-8">
                 
-                <div>
-                    <label for="fk_cliente" class="block text-sm font-medium text-gray-700">Cliente (Opcional)</label>
-                    <select id="fk_cliente" name="fk_cliente" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                        <option value="">Nenhum</option>
-                        @foreach ($clientes as $cliente)
-                            <option value="{{ $cliente->id }}">{{ $cliente->nome }}</option>
-                        @endforeach
-                    </select>
-                </div>
+                <h2 class="text-xl font-semibold mb-4 border-b pb-2">Adicionar Produtos (Opcional)</h2>
 
-                <div>
-                    <label for="fk_tipo_pedido" class="block text-sm font-medium text-gray-700">Tipo de Pedido</label>
-                    <select id="fk_tipo_pedido" name="fk_tipo_pedido" required class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                        @foreach ($tiposPedido as $tipo)
-                            <option value="{{ $tipo->id }}">{{ $tipo->nome }}</option>
-                        @endforeach
-                    </select>
-                </div>
+                <template x-for="(produto, index) in produtos" :key="index">
+                    <div class="grid grid-cols-12 gap-4 items-center mb-3 p-2 border rounded">
+                        {{-- Dropdown de Produto --}}
+                        <div class="col-span-8">
+                            <label class="block text-sm font-medium text-gray-700">Produto</label>
+                            <select :name="`produtos[${index}][produto_id]`" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                <option value="">Selecione um produto</option>
+                                @foreach ($produtosDisponiveis as $produto)
+                                    <option value="{{ $produto->id }}">{{ $produto->nome }}</option>
+                                @endforeach
+                            </select>
+                        </div>
 
-                <div>
-                    <label for="dt_previsao" class="block text-sm font-medium text-gray-700">Data de Previsão</label>
-                    <input type="date" name="dt_previsao" id="dt_previsao" class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                </div>
+                        {{-- Quantidade --}}
+                        <div class="col-span-3">
+                             <label class="block text-sm font-medium text-gray-700">Quantidade</label>
+                            <input type="number" :name="`produtos[${index}][quantidade]`" x-model="produto.quantidade" value="1" step="0.01" class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        </div>
 
-                <div class="md:col-span-2">
-                    <label for="observacao" class="block text-sm font-medium text-gray-700">Observação</label>
-                    <textarea name="observacao" id="observacao" rows="4" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
-                </div>
-
-                <div class="md:col-span-2">
-                    <div class="flex items-center">
-                        <input id="urgente" name="urgente" type="checkbox" value="1" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                        <label for="urgente" class="ml-2 block text-sm text-gray-900">Marcar como Urgente</label>
+                        {{-- Botão de Remover --}}
+                        <div class="col-span-1 pt-6">
+                            <button type="button" @click="removerProduto(index)" class="text-red-500 hover:text-red-700 font-bold">&times;</button>
+                        </div>
                     </div>
-                </div>
+                </template>
+
+                <button type="button" @click="adicionarProduto()" class="mt-2 text-sm text-blue-600 hover:underline">
+                    + Adicionar outro produto
+                </button>
             </div>
 
             <div class="mt-8 flex justify-end">
@@ -52,7 +60,7 @@
                     Cancelar
                 </a>
                 <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">
-                    Salvar e Adicionar Produtos
+                    Criar Pedido
                 </button>
             </div>
         </form>

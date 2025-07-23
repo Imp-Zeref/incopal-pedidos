@@ -19,6 +19,9 @@ class StorePedidoRequest extends FormRequest
             'dt_previsao' => 'nullable|date',
             'observacao' => 'nullable|string',
             'urgente' => 'nullable|boolean',
+            'produtos' => 'nullable|array',
+            'produtos.*.produto_id' => 'required_with:produtos|exists:produtos,id',
+            'produtos.*.quantidade' => 'required_with:produtos|numeric|min:0.01',
         ];
     }
 }
