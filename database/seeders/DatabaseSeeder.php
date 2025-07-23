@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             TipoUsuarioSeeder::class,
             UsuarioSeeder::class,
             StatusPedidoSeeder::class,
+            TipoPedidoSeeder::class,
         ]);
 
     }

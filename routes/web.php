@@ -12,8 +12,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
-
+    
+    Route::patch('/pedidos/{pedido}/status', [PedidoController::class, 'updateStatus'])->name('pedidos.status.update');
     Route::resource('pedidos', PedidoController::class);
+    Route::post('/pedidos/{pedido}/produtos', [PedidoController::class, 'addProduct'])->name('pedidos.produtos.store');
+    Route::patch('/pedidos/{pedido}/cancel', [PedidoController::class, 'cancel'])->name('pedidos.cancel'); 
 });
 
 Route::middleware('guest')->group(function () {
