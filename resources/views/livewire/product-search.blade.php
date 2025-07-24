@@ -2,7 +2,13 @@
     {{-- BARRA DE FILTROS E PESQUISA --}}
     <div class="bg-white p-4 rounded-xl shadow-lg mb-2">
         <input wire:model.live.debounce.300ms="search" type="text" placeholder="Pesquisar por código, nome, descrição, aplicação..."
-               class="w-full border-gray-300 rounded-lg shadow-sm py-3 px-4 text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            class="w-full border-gray-300 rounded-lg shadow-sm py-3 px-4 text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+        <div class="flex items-center space-x-4 mt-2">
+            <label class="flex items-center">
+                <input type="checkbox" wire:model.live="useCommaAsAnd" class="form-checkbox h-5 w-5 text-indigo-600">
+                <span class="ml-2 text-gray-700">Buscar termos separados por vírgula</span>
+            </label>
+        </div>
     </div>
 
     {{-- TABELA DE PRODUTOS CORRIGIDA --}}

@@ -12,6 +12,7 @@ class ProductSearch extends Component
     public $sortDirection = 'asc';
     public const PER_PAGE = 25;
     public $perPage = self::PER_PAGE;
+    public $useCommaAsAnd = false;
 
     public $totalProducts = 0;
 
@@ -25,18 +26,23 @@ class ProductSearch extends Component
         $query = Produto::query();
 
         if (!empty(trim($this->search))) {
-            $searchTerm = implode(' & ', array_filter(explode(' ', $this->search)));
+            if ($this->useCommaAsAnd) {
+                $terms = preg_split('/\s*,\s*/', $this->search);
+                $searchString = implode(' ', array_filter($terms));
+            } else {
+                $searchString = $this->search;
+            }
 
-            if (!empty($searchTerm)) {
-                $query->whereRaw("search_vector @@ to_tsquery('portuguese', ?)", [$searchTerm]);
+            if (!empty($searchString)) {
+                $query->whereRaw("search_vector @@ plainto_tsquery('portuguese', unaccent(?))", [$searchString]);
             }
         }
 
         $this->totalProducts = $query->count();
 
         $produtos = $query->orderBy($this->sortColumn, $this->sortDirection)
-                          ->take($this->perPage)
-                          ->get();
+            ->take($this->perPage)
+            ->get();
 
         return view('livewire.product-search', [
             'produtos' => $produtos
