@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Produto;
 use League\Csv\Reader;
+use Illuminate\Support\Facades\Log;
 
 class ImportacaoController extends Controller
 {
@@ -22,16 +23,19 @@ class ImportacaoController extends Controller
         $caminho = $request->file('arquivo_csv')->getRealPath();
         $csv = Reader::createFromPath($caminho, 'r');
         $csv->setHeaderOffset(0);
+        $csv->setDelimiter(';');
 
         $registros = $csv->getRecords();
 
         foreach ($registros as $registro) {
-            if (empty(trim($registro['codigo'] ?? ''))) {
+            $codigo = (string) ($registro['codigo'] ?? '');
+
+            if (empty(trim($codigo))) {
                 continue;
             }
-            
+
             Produto::updateOrCreate(
-                ['codigo' => $registro['codigo']],
+                ['codigo' => $codigo],
                 [
                     'descricao' => $registro['descricao'] ?? null,
                     'original' => $registro['original'] ?? null,
@@ -42,7 +46,7 @@ class ImportacaoController extends Controller
                 ]
             );
         }
-        
+
         return redirect()->back()->with('sucesso', 'Produtos importados e atualizados com sucesso!');
     }
 }

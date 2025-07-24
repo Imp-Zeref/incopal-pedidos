@@ -14,6 +14,7 @@ class Produto extends Model
 
     protected $fillable = [
         'nome',
+        'codigo',
         'descricao',
         'descricao2',
         'descricao3',
@@ -23,6 +24,10 @@ class Produto extends Model
         'diversa',
         'unidadeMedida',
         'aplicacao',
+    ];
+
+    protected $casts = [
+        'codigo' => 'string',
     ];
 
     public function pedidos(): BelongsToMany
