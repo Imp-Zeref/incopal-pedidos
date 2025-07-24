@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,45 +9,35 @@
     @livewireStyles
 </head>
 
-{{-- A mágica acontece aqui no body --}}
-<body class="bg-gray-100 text-gray-900 h-screen flex flex-col">
-
-    <header class="bg-white shadow-md z-20">
-        {{-- O conteúdo do seu header não muda --}}
-        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+<body class="bg-gray-100 text-gray-800 h-screen flex flex-col font-sans">
+    <header class="bg-white shadow-md z-20 flex-shrink-0 border-b-4 border-blue-600">
+        <nav class="px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
             <div>
-                <a href="{{ route('home') }}" class="text-xl font-bold">Incopal Pedidos</a>
+                <a href="{{ route('home') }}" class="text-2xl font-bold text-blue-700 hover:text-blue-800 transition-colors">
+                    Incopal Pedidos
+                </a>
             </div>
-            <div class="space-x-4">
+            <div class="space-x-4 flex items-center">
                 @auth
-                    <a href="{{ route('pedidos.index') }}" class="hover:text-blue-600">Meus Pedidos</a>
+                    <a href="{{ route('pedidos.index') }}" class="text-gray-600 hover:text-blue-600 font-medium">Meus Pedidos</a>
                     @if (auth()->user()->tipoUsuario->nome === 'Administrador')
-                        <a href="{{ route('import.produtos.form') }}" class="hover:text-blue-600">Atualizar Produtos</a>
+                        <a href="{{ route('import.produtos.form') }}" class="text-gray-600 hover:text-blue-600 font-medium">Importar Produtos</a>
                     @endif
                     <form method="POST" action="{{ route('logout') }}" class="inline">
                         @csrf
-                        <button type="submit" class="hover:text-blue-600">Sair</button>
+                        <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-3 rounded-md text-sm transition-colors">Sair</button>
                     </form>
                 @else
-                    <a href="{{ route('login') }}" class="hover:text-blue-600">Login</a>
+                    <a href="{{ route('login') }}" class="text-gray-600 hover:text-blue-600 font-medium">Login</a>
                 @endauth
             </div>
         </nav>
     </header>
 
-    {{-- A área principal agora controla o próprio scroll --}}
-    <main class="container mx-auto px-6 py-8 flex-grow overflow-y-auto">
+    <main class="px-4 sm:px-6 lg:px-8 py-2 flex-grow overflow-y-hidden">
         {{ $slot }}
     </main>
-
-    <footer class="bg-white shadow-md z-20">
-        {{-- O conteúdo do seu footer não muda --}}
-        <div class="container mx-auto text-center text-sm text-gray-500 py-4">
-            <p>&copy; {{ date('Y') }} Incopal Pedidos - Todos os direitos reservados.</p>
-        </div>
-    </footer>
     
     @livewireScripts
 </body>
-
 </html>

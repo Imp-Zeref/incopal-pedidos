@@ -61,11 +61,18 @@ class ProductSearch extends Component
     public function render()
     {
         $query = Produto::query();
+        if (!empty($this->search) && !empty($this->selectedColumns)) {
+            $searchTerms = $this->matchAllWords ? explode(' ', $this->search) : [$this->search];
 
-        if (!empty($this->search)) {
-            $searchTerm = implode(' & ', explode(' ', $this->search));
-
-            $query->whereRaw("search_vector @@ to_tsquery('portuguese', ?)", [$searchTerm]);
+            $query->where(function ($q) use ($searchTerms) {
+                foreach ($searchTerms as $term) {
+                    $q->where(function ($subQ) use ($term) {
+                        foreach ($this->selectedColumns as $column) {
+                            $subQ->orWhere($column, 'like', '%' . trim($term) . '%');
+                        }
+                    });
+                }
+            });
         }
 
         $produtos = $query->orderBy($this->sortColumn, $this->sortDirection)
