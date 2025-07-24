@@ -17,9 +17,24 @@
             <table class="min-w-full text-sm">
                 <thead class="bg-gray-100 text-gray-700 sticky top-0 z-10">
                     <tr>
-                        <th class="px-4 py-3 w-1/12 text-left font-bold uppercase tracking-wider">Código</th>
-                        <th class="px-4 py-3 w-2/12 text-left font-bold uppercase tracking-wider">Original</th>
-                        <th class="px-4 py-3 w-3/12 text-left font-bold uppercase tracking-wider">Descrição</th>
+                        <th class="px-4 py-2 w-2/12 text-left cursor-pointer font-bold uppercase" wire:click="sortBy('codigo')">
+                            Código
+                            @if($sortColumn === 'codigo')
+                            @if($sortDirection === 'asc') ▲ @else ▼ @endif
+                            @endif
+                        </th>
+                        <th class="px-4 py-2 w-2/12 text-left cursor-pointer font-bold uppercase" wire:click="sortBy('original')">
+                            Original
+                            @if($sortColumn === 'original')
+                            @if($sortDirection === 'asc') ▲ @else ▼ @endif
+                            @endif
+                        </th>
+                        <th class="px-4 py-2 w-2/12 text-left cursor-pointer font-bold uppercase" wire:click="sortBy('descricao')">
+                            Descricao
+                            @if($sortColumn === 'descricao')
+                            @if($sortDirection === 'asc') ▲ @else ▼ @endif
+                            @endif
+                        </th>
                         <th class="px-4 py-3 w-1/12 text-left font-bold uppercase tracking-wider">Descrição2</th>
                         <th class="px-4 py-3 w-1/12 text-left font-bold uppercase tracking-wider">Secundário</th>
                         <th class="px-4 py-3 w-1/12 text-left font-bold uppercase tracking-wider">Localização</th>

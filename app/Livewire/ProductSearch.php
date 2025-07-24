@@ -16,6 +16,16 @@ class ProductSearch extends Component
 
     public $totalProducts = 0;
 
+    public function sortBy($field)
+    {
+        if ($this->sortColumn === $field) {
+            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->sortColumn = $field;
+            $this->sortDirection = 'asc';
+        }
+    }
+
     public function mount()
     {
         $this->totalProducts = Produto::count();
