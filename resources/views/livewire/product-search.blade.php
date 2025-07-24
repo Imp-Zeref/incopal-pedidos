@@ -1,8 +1,8 @@
 <div>
     {{-- BARRA DE FILTROS E PESQUISA --}}
-    <div class="bg-white p-4 rounded-xl shadow-lg mb-2">
+    <div class="flex bg-white p-4 rounded-xl space-x-10 shadow-lg mb-2 flex-row">
         <input wire:model.live.debounce.300ms="search" type="text" placeholder="Pesquisar por código, nome, descrição, aplicação..."
-            class="w-full border-gray-300 rounded-lg shadow-sm py-3 px-4 text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            class="w-1/2 bg-gray-200 border-gray-400 rounded-lg shadow-md py-3 px-4 text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
         <div class="flex items-center space-x-4 mt-2">
             <label class="flex items-center">
                 <input type="checkbox" wire:model.live="useCommaAsAnd" class="form-checkbox h-5 w-5 text-indigo-600">
@@ -11,9 +11,8 @@
         </div>
     </div>
 
-    {{-- TABELA DE PRODUTOS CORRIGIDA --}}
+    {{-- TABELA DE PRODUTOS --}}
     <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-        {{-- A div externa controla o scroll e a altura máxima --}}
         <div class="overflow-y-auto" style="max-height: 75vh;">
             <table class="min-w-full text-sm">
                 <thead class="bg-gray-100 text-gray-700 sticky top-0 z-10">
@@ -25,22 +24,22 @@
                         <th class="px-4 py-3 w-1/12 text-left font-bold uppercase tracking-wider">Secundário</th>
                         <th class="px-4 py-3 w-1/12 text-left font-bold uppercase tracking-wider">Localização</th>
                         <th class="px-4 py-3 w-1/12 text-left font-bold uppercase tracking-wider">Diversa</th>
-                        <th class="px-4 py-3 w-1/12 text-left font-bold uppercase tracking-wider">Aplicação</th>
-                        <th class="px-4 py-3 w-1/12 text-left font-bold uppercase tracking-wider">Descrição3</th>
+                        <th class="px-4 py-3 w-1/12 text-left font-bold uppercase tracking-wider">Preço</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200 text-gray-700" wire:loading.class.delay="opacity-50">
                     @forelse ($produtos as $produto)
                     <tr class="hover:bg-blue-50 transition-colors">
-                        <td class="px-4 py-2 font-mono">{{ $produto->codigo }}</td>
+                        <td class="px-4 py-2 ">{{ $produto->codigo }}</td>
                         <td class="px-4 py-2">{{ $produto->original ?? '' }}</td>
                         <td class="px-4 py-2 font-semibold">{{ $produto->descricao ?? '' }}</td>
                         <td class="px-4 py-2">{{ $produto->descricao2 ?? '' }}</td>
                         <td class="px-4 py-2">{{ $produto->secundario ?? '' }}</td>
                         <td class="px-4 py-2">{{ $produto->localizacao ?? '' }}</td>
                         <td class="px-4 py-2">{{ $produto->diversa ?? '' }}</td>
-                        <td class="px-4 py-2">{{ $produto->aplicacao ?? '' }}</td>
-                        <td class="px-4 py-2">{{ $produto->descricao3 ?? '' }}</td>
+                        <td class="px-4 py-2">
+                            R$ {{ number_format($produto->preco ?? 0, 2, ',', '.') }}
+                        </td>
                     </tr>
                     @empty
                     <tr>
@@ -52,12 +51,31 @@
                 </tbody>
             </table>
 
-            {{-- TRIGGER DO SCROLL INFINITO - POSIÇÃO CORRIGIDA --}}
-            <div x-data x-intersect.full="$wire.loadMore()">
-                <div wire:loading wire:target="loadMore" class="text-center py-6">
-                    <p class="text-gray-500 animate-pulse">Carregando mais...</p>
+            {{-- GATILHO DE CARREGAMENTO AUTOMÁTICO --}}
+            @if(count($produtos) < $totalProducts)
+                <div x-data="{
+                    init() {
+                        let observer = new IntersectionObserver((entries) => {
+                            entries.forEach(entry => {
+                                if (entry.isIntersecting) {
+                                    @this.call('loadMore')
+                                }
+                            })
+                        });
+                        observer.observe(this.$el);
+                    }
+                }" class="p-6 text-center">
+                <div wire:loading wire:target="loadMore">
+                    <p class="text-gray-500 animate-pulse">Carregando...</p>
                 </div>
-            </div>
         </div>
+        @else
+        @if($totalProducts > 0)
+        <div class="p-6 text-center text-gray-500">
+            Fim dos resultados.
+        </div>
+        @endif
+        @endif
     </div>
+</div>
 </div>

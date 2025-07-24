@@ -24,6 +24,7 @@ class Produto extends Model
         'diversa',
         'unidadeMedida',
         'aplicacao',
+        'preco'
     ];
 
     protected $casts = [

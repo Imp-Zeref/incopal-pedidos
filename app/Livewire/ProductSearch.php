@@ -10,15 +10,27 @@ class ProductSearch extends Component
     public $search = '';
     public $sortColumn = 'codigo';
     public $sortDirection = 'asc';
-    public const PER_PAGE = 25;
+    public const PER_PAGE = 50;
     public $perPage = self::PER_PAGE;
-    public $useCommaAsAnd = false;
+    public $useCommaAsAnd = true;
 
     public $totalProducts = 0;
 
+    public function mount()
+    {
+        $this->totalProducts = Produto::count();
+    }
+
     public function loadMore()
     {
-        $this->perPage += self::PER_PAGE;
+        if ($this->perPage < $this->totalProducts) {
+            $this->perPage += self::PER_PAGE;
+        }
+    }
+
+    public function updatedSearch()
+    {
+        $this->perPage = self::PER_PAGE;
     }
 
     public function render()
@@ -28,17 +40,20 @@ class ProductSearch extends Component
         if (!empty(trim($this->search))) {
             if ($this->useCommaAsAnd) {
                 $terms = preg_split('/\s*,\s*/', $this->search);
-                $searchString = implode(' ', array_filter($terms));
+                $processedTerms = array_map(fn($term) => trim($term) . ':*', array_filter($terms));
+                $searchString = implode(' & ', $processedTerms);
             } else {
-                $searchString = $this->search;
+                $terms = preg_split('/\s+/', $this->search);
+                $processedTerms = array_map(fn($term) => trim($term) . ':*', array_filter($terms));
+                $searchString = implode(' | ', $processedTerms);
             }
 
             if (!empty($searchString)) {
-                $query->whereRaw("search_vector @@ plainto_tsquery('portuguese', unaccent(?))", [$searchString]);
+                $query->whereRaw("search_vector @@ to_tsquery('portuguese', unaccent(?))", [$searchString]);
             }
         }
 
-        $this->totalProducts = $query->count();
+        $this->totalProducts = $query->clone()->count();
 
         $produtos = $query->orderBy($this->sortColumn, $this->sortDirection)
             ->take($this->perPage)

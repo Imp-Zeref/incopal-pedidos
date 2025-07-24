@@ -16,7 +16,7 @@ return new class extends Migration
             FOR EACH ROW EXECUTE PROCEDURE
             tsvector_update_trigger(
                 search_vector, 'pg_catalog.portuguese',
-                codigo, descricao, descricao2, descricao3,
+                codigo, descricao, descricao2,
                 aplicacao, original, secundario, localizacao, diversa
             );
         ");
