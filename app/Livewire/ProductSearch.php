@@ -9,18 +9,22 @@ class ProductSearch extends Component
 {
     public $search = '';
     public $matchAllWords = false;
-    public $selectedColumns = []; 
+    public $selectedColumns = [];
     public $searchAllColumns = true;
 
-    public $sortColumn = 'descricao';
+    public $sortColumn = 'codigo';
     public $sortDirection = 'asc';
     public $perPage = 20;
 
     public $availableColumns = [
+        'codigo' => 'Código',
         'descricao' => 'Descrição',
         'original' => 'Original',
         'secundario' => 'Secundário',
+        'descricao2' => 'Descrição2',
+        'descricao3' => 'Descrição3',
         'localizacao' => 'Localização',
+        'aplicacao' => 'Aplicação',
         'diversa' => 'Diversa'
     ];
 
@@ -44,7 +48,7 @@ class ProductSearch extends Component
     {
         $this->selectedColumns = [];
         $this->searchAllColumns = true;
-        $this->sortColumn = 'descricao';
+        $this->sortColumn = 'codigo';
         $this->sortDirection = 'asc';
         $this->matchAllWords = false;
     }
@@ -62,12 +66,12 @@ class ProductSearch extends Component
 
         if (!empty($this->search) && !empty($columnsToSearch)) {
             $searchTerms = $this->matchAllWords ? explode(' ', $this->search) : [$this->search];
-            
+
             $query->where(function ($q) use ($searchTerms, $columnsToSearch) {
                 foreach ($searchTerms as $term) {
                     $q->where(function ($subQ) use ($term, $columnsToSearch) {
                         foreach ($columnsToSearch as $column) {
-                            $subQ->orWhere($column, 'like', '%' . trim($term) . '%');
+                            $subQ->orWhereRaw("LOWER($column) LIKE ?", ['%' . strtolower(trim($term)) . '%']);
                         }
                     });
                 }
@@ -75,8 +79,8 @@ class ProductSearch extends Component
         }
 
         $produtos = $query->orderBy($this->sortColumn, $this->sortDirection)
-                          ->take($this->perPage)
-                          ->get();
+            ->take($this->perPage)
+            ->get();
 
         return view('livewire.product-search', [
             'produtos' => $produtos

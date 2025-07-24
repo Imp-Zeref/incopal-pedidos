@@ -5,7 +5,6 @@ use App\Http\Controllers\PedidoController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ImportacaoController;
-use App\Http\Middleware\IsAdmin;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 

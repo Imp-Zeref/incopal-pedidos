@@ -13,6 +13,7 @@ return new class extends Migration
             $table->string('nome')->unique();
             $table->string('password');
             $table->boolean('bloqueado')->default(false);
+            $table->json('hidden_columns')->nullable();
             $table->foreignId('fk_tipo_usuario')->constrained('tipo_usuarios');
             $table->rememberToken();
             $table->timestamps();

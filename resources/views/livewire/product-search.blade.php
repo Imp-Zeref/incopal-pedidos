@@ -36,22 +36,50 @@
             </div>
         </div>
 
-        {{-- LISTA DE PRODUTOS --}}
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            @forelse ($produtos as $produto)
-            <div class="bg-white p-4 rounded-lg shadow-md flex flex-col">
-                <p class="text-gray-600 text-sm mb-2 flex-grow">{{ $produto->descricao ?? 'Sem descrição.' }}</p>
-                <div class="text-xs text-gray-500 mt-2">
-                    <p><strong>Original:</strong> {{ $produto->original ?? 'N/A' }}</p>
-                    <p><strong>Localização:</strong> {{ $produto->localizacao ?? 'N/A' }}</p>
-                </div>
+        {{-- LISTA DE PRODUTOS EM TABELA --}}
+        <div class="overflow-x-auto bg-white shadow-md rounded-lg">
+            {{-- Container com rolagem --}}
+            <div class="max-h-[500px] overflow-y-auto">
+                <table class="min-w-full divide-y divide-gray-200 text-sm">
+                    <thead class="bg-gray-100 text-gray-700 text-left sticky top-0 z-10">
+                        <tr>
+                            <th scope="col" class="px-4 py-2 bg-gray-100">Codigo</th>
+                            <th scope="col" class="px-4 py-2 bg-gray-100">Original</th>
+                            <th scope="col" class="px-4 py-2 bg-gray-100">Descrição</th>
+                            <th scope="col" class="px-4 py-2 bg-gray-100">Descrição2</th>
+                            <th scope="col" class="px-4 py-2 bg-gray-100">Secundario</th>
+                            <th scope="col" class="px-4 py-2 bg-gray-100">Localização</th>
+                            <th scope="col" class="px-4 py-2 bg-gray-100">Diversa</th>
+                            <th scope="col" class="px-4 py-2 bg-gray-100">Aplicação</th>
+                            <th scope="col" class="px-4 py-2 bg-gray-100">Descrição3</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200 text-gray-700">
+                        @forelse ($produtos as $index => $produto)
+                        <tr class="hover:bg-gray-50 cursor-pointer">
+                            <td class="px-4 py-2">{{ $produto->codigo }}</td>
+                            <td class="px-4 py-2">{{ $produto->original ?? '' }}</td>
+                            <td class="px-4 py-2">{{ $produto->descricao ?? '' }}</td>
+                            <td class="px-4 py-2">{{ $produto->descricao2 ?? '' }}</td>
+                            <td class="px-4 py-2">{{ $produto->secundario ?? '' }}</td>
+                            <td class="px-4 py-2">{{ $produto->localizacao ?? '' }}</td>
+                            <td class="px-4 py-2">{{ $produto->diversa ?? '' }}</td>
+                            <td class="px-4 py-2">{{ $produto->aplicacao ?? ''  }}</td>
+                            <td class="px-4 py-2">{{ $produto->descricao3 ?? '' }}</td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="9" class="text-center px-4 py-6 text-gray-500">
+                                Nenhum produto encontrado com os filtros atuais.
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
-            @empty
-            <div class="col-span-full text-center py-12">
-                <p class="text-gray-500">Nenhum produto encontrado com os filtros atuais.</p>
-            </div>
-            @endforelse
         </div>
+
+
 
         {{-- TRIGGER DO SCROLL INFINITO --}}
         <div x-show="scrolled" x-intersect.full="$wire.loadMore()" class="text-center py-4">

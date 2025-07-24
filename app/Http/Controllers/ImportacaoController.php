@@ -34,12 +34,22 @@ class ImportacaoController extends Controller
                 continue;
             }
 
+            $descricao = mb_convert_encoding($registro['descricao'], 'UTF-8', 'ISO-8859-1');
+            $descricao2 = mb_convert_encoding($registro['descricao2'], 'UTF-8', 'ISO-8859-1');
+            $descricao3 = mb_convert_encoding($registro['descricao3'], 'UTF-8', 'ISO-8859-1');
+            $original = mb_convert_encoding($registro['original'], 'UTF-8', 'ISO-8859-1');
+            $secundario = mb_convert_encoding($registro['secundario'], 'UTF-8', 'ISO-8859-1');
+            $aplicacao = mb_convert_encoding($registro['aplicacao'], 'UTF-8', 'ISO-8859-1');
+
             Produto::updateOrCreate(
                 ['codigo' => $codigo],
                 [
-                    'descricao' => $registro['descricao'] ?? null,
-                    'original' => $registro['original'] ?? null,
-                    'secundario' => $registro['secundario'] ?? null,
+                    'descricao' => $descricao ?? null,
+                    'descricao2' => $descricao2 ?? null,
+                    'descricao3' => $descricao3 ?? null,
+                    'original' => $original ?? null,
+                    'secundario' => $secundario ?? null,
+                    'aplciacao' => $aplicacao ?? null,
                     'localizacao' => $registro['localizacao'] ?? null,
                     'diversa' => $registro['diversa'] ?? null,
                     'unidadeMedida' => $registro['unidademedida'] ?? null,
