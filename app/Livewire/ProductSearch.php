@@ -62,20 +62,10 @@ class ProductSearch extends Component
     {
         $query = Produto::query();
 
-        $columnsToSearch = $this->searchAllColumns ? array_keys($this->availableColumns) : $this->selectedColumns;
+        if (!empty($this->search)) {
+            $searchTerm = implode(' & ', explode(' ', $this->search));
 
-        if (!empty($this->search) && !empty($columnsToSearch)) {
-            $searchTerms = $this->matchAllWords ? explode(' ', $this->search) : [$this->search];
-
-            $query->where(function ($q) use ($searchTerms, $columnsToSearch) {
-                foreach ($searchTerms as $term) {
-                    $q->where(function ($subQ) use ($term, $columnsToSearch) {
-                        foreach ($columnsToSearch as $column) {
-                            $subQ->orWhereRaw("LOWER($column) LIKE ?", ['%' . strtolower(trim($term)) . '%']);
-                        }
-                    });
-                }
-            });
+            $query->whereRaw("search_vector @@ to_tsquery('portuguese', ?)", [$searchTerm]);
         }
 
         $produtos = $query->orderBy($this->sortColumn, $this->sortDirection)
