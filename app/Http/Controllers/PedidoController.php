@@ -37,7 +37,7 @@ class PedidoController extends Controller
     {
         $clientes = Cliente::orderBy('nome')->get();
         $tiposPedido = TipoPedido::all();
-        $produtosDisponiveis = Produto::orderBy('nome')->get();
+        $produtosDisponiveis = Produto::orderBy('descricao')->get();
 
         return view('pedidos.create', compact('clientes', 'tiposPedido', 'produtosDisponiveis'));
     }
@@ -77,7 +77,7 @@ class PedidoController extends Controller
     public function show(Request $request, Pedido $pedido)
     {
         $pedido->load('usuario', 'cliente', 'statusPedido', 'tipoPedido', 'produtos');
-        $produtos = Produto::orderBy('nome')->get();
+        $produtos = Produto::orderBy('descricao')->get();
 
         $statusDisponiveis = StatusPedido::whereIn('nome', ['Encomendado', 'Concluído', 'Não Cotado'])->get();
 

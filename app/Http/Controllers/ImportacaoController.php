@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Produto;
-use League\Csv\Reader; // Importe a classe da biblioteca
+use League\Csv\Reader;
 
 class ImportacaoController extends Controller
 {
     public function showProdutosForm()
     {
-        return view('import.produtos');
+        return view('importar.produtos');
     }
 
     public function importProdutos(Request $request)
@@ -21,15 +21,18 @@ class ImportacaoController extends Controller
 
         $caminho = $request->file('arquivo_csv')->getRealPath();
         $csv = Reader::createFromPath($caminho, 'r');
-        $csv->setHeaderOffset(0); // Usa a primeira linha como cabeçalho
+        $csv->setHeaderOffset(0);
 
         $registros = $csv->getRecords();
 
         foreach ($registros as $registro) {
+            if (empty(trim($registro['codigo'] ?? ''))) {
+                continue;
+            }
+            
             Produto::updateOrCreate(
                 ['codigo' => $registro['codigo']],
                 [
-                    'nome' => $registro['nome'],
                     'descricao' => $registro['descricao'] ?? null,
                     'original' => $registro['original'] ?? null,
                     'secundario' => $registro['secundario'] ?? null,

@@ -10,14 +10,13 @@ class ProductSearch extends Component
     public $search = '';
     public $matchAllWords = false;
     public $selectedColumns = []; 
-    public $searchAllColumns = true; // Nova propriedade para o checkbox "Todas"
+    public $searchAllColumns = true;
 
-    public $sortColumn = 'nome';
+    public $sortColumn = 'descricao';
     public $sortDirection = 'asc';
     public $perPage = 20;
 
     public $availableColumns = [
-        'nome' => 'Nome',
         'descricao' => 'Descrição',
         'original' => 'Original',
         'secundario' => 'Secundário',
@@ -25,22 +24,18 @@ class ProductSearch extends Component
         'diversa' => 'Diversa'
     ];
 
-    // Hook: Executado quando 'searchAllColumns' é alterado
     public function updatedSearchAllColumns($value)
     {
         if ($value) {
-            $this->selectedColumns = []; // Se marcou "Todas", limpa as outras seleções
+            $this->selectedColumns = [];
         }
     }
 
-    // Hook: Executado quando 'selectedColumns' é alterado
     public function updatedSelectedColumns($value)
     {
-        // Se selecionou alguma coluna individual, desmarca "Todas"
         if (!empty($value)) {
             $this->searchAllColumns = false;
         } else {
-            // Se limpou todas as seleções, volta a marcar "Todas"
             $this->searchAllColumns = true;
         }
     }
@@ -49,7 +44,7 @@ class ProductSearch extends Component
     {
         $this->selectedColumns = [];
         $this->searchAllColumns = true;
-        $this->sortColumn = 'nome';
+        $this->sortColumn = 'descricao';
         $this->sortDirection = 'asc';
         $this->matchAllWords = false;
     }
@@ -63,7 +58,6 @@ class ProductSearch extends Component
     {
         $query = Produto::query();
 
-        // Determina em quais colunas buscar
         $columnsToSearch = $this->searchAllColumns ? array_keys($this->availableColumns) : $this->selectedColumns;
 
         if (!empty($this->search) && !empty($columnsToSearch)) {

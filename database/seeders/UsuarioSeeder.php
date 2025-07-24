@@ -20,5 +20,11 @@ class UsuarioSeeder extends Seeder
                 'fk_tipo_usuario' => $tipoAdmin->id,
             ]);
         }
+
+        User::create([
+            'nome' => 'Vendedor Luiz',
+            'password' => Hash::make('incopal'),
+            'fk_tipo_usuario' => 3,
+        ]);
     }
 }

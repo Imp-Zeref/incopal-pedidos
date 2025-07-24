@@ -40,7 +40,6 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             @forelse ($produtos as $produto)
             <div class="bg-white p-4 rounded-lg shadow-md flex flex-col">
-                <h3 class="text-lg font-bold mb-2">{{ $produto->nome }}</h3>
                 <p class="text-gray-600 text-sm mb-2 flex-grow">{{ $produto->descricao ?? 'Sem descrição.' }}</p>
                 <div class="text-xs text-gray-500 mt-2">
                     <p><strong>Original:</strong> {{ $produto->original ?? 'N/A' }}</p>

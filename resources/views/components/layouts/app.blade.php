@@ -20,13 +20,16 @@
                 @auth
                     <a href="{{ route('pedidos.index') }}" class="hover:text-blue-600">Meus Pedidos</a>
 
+                    @if (auth()->user()->tipoUsuario->nome === 'Administrador')
+                        <a href="{{ route('import.produtos.form') }}" class="hover:text-blue-600">Atualizar Produtos</a>
+                    @endif
+
                     <form method="POST" action="{{ route('logout') }}" class="inline">
                         @csrf
                         <button type="submit" class="hover:text-blue-600">Sair</button>
                     </form>
                 @else
                     <a href="{{ route('login') }}" class="hover:text-blue-600">Login</a>
-                    {{-- <a href="{{ route('register') }}" class="hover:text-blue-600">Registrar</a> --}}
                 @endauth
             </div>
         </nav>
@@ -41,7 +44,7 @@
             <p>&copy; {{ date('Y') }} Incopal Pedidos - Todos os direitos reservados.</p>
         </div>
     </footer>
-    
+
     @livewireScripts
 </body>
 
