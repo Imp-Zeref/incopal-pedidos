@@ -24,6 +24,9 @@ return new class extends Migration
             $table->string('unidadeMedida')->nullable();
             $table->boolean('bloqueado')->nullable();
             $table->string('diversa')->nullable();
+            $table->decimal('preco', 12, 2)->default(0);
+            $table->decimal('estoque', 12, 2)->default(0);
+            $table->date('ultimaCompra')->nullable();
             $table->timestamps();
         });
     }
