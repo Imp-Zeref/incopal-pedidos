@@ -62,13 +62,33 @@ class ProcessarImportacaoProdutos implements ShouldQueue
                 continue;
             }
 
+            $estoqueBruto = $registro['estoque'] ?? null;
+
+            if ($estoqueBruto !== null && $estoqueBruto !== ''){
+                $estoqueBruto = trim($estoqueBruto);
+                $estoqueBruto = str_replace('.', '', $estoqueBruto);
+                $estoqueBruto = str_replace(',', '.', $estoqueBruto);
+
+                if (is_numeric($estoqueBruto)) {
+                    $estoqueConvertido = number_format((float)$estoqueBruto, 2, '.', '');
+                    if( $estoqueConvertido <= 0) {
+                        $precoConvertido = 0;
+                    }
+                } else {
+                    echo "Estoque inválido: {$estoqueBruto} no produto código {$codigo}\n";
+                    continue;
+                }
+            } else {
+                echo "Estoque ausente para o produto código {$codigo}\n";
+                continue;
+            }
+
             $descricao   = isset($registro['descricao'])   ? mb_convert_encoding($registro['descricao'], 'UTF-8', 'ISO-8859-1') : null;
             $descricao2  = isset($registro['descricao2'])  ? mb_convert_encoding($registro['descricao2'], 'UTF-8', 'ISO-8859-1') : null;
             $descricao3  = isset($registro['descricao3'])  ? mb_convert_encoding($registro['descricao3'], 'UTF-8', 'ISO-8859-1') : null;
             $original    = isset($registro['original'])    ? mb_convert_encoding($registro['original'],   'UTF-8', 'ISO-8859-1') : null;
             $secundario  = isset($registro['secundario'])  ? mb_convert_encoding($registro['secundario'], 'UTF-8', 'ISO-8859-1') : null;
             $aplicacao   = isset($registro['aplicacao'])   ? mb_convert_encoding($registro['aplicacao'],  'UTF-8', 'ISO-8859-1') : null;
-            $preco       = isset($registro['preco'])       ? mb_convert_encoding($registro['preco'],      'UTF-8', 'ISO-8859-1') : null;
 
             $validadeRaw = $registro['validade'] ?? null;
             $validade = null;
@@ -93,6 +113,7 @@ class ProcessarImportacaoProdutos implements ShouldQueue
                     'diversa'         => $registro['diversa']         ?? null,
                     'unidadeMedida'   => $registro['unidademedida']   ?? null,
                     'preco'           => $precoConvertido,
+                    'estoque'         => $estoqueConvertido,
                     'validade'        => $validade
                 ]
             );

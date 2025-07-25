@@ -17,7 +17,7 @@
             <table class="min-w-full text-sm">
                 <thead class="bg-gray-100 text-gray-700 sticky top-0 z-10">
                     <tr>
-                        <th class="px-4 py-2 w-2/12 text-left cursor-pointer font-bold uppercase" wire:click="sortBy('codigo')">
+                        <th class="px-4 py-2 w-1/12 text-left cursor-pointer font-bold uppercase" wire:click="sortBy('codigo')">
                             Código
                             @if($sortColumn === 'codigo')
                             @if($sortDirection === 'asc') ▲ @else ▼ @endif
@@ -37,24 +37,24 @@
                         </th>
                         <th class="px-4 py-3 w-1/12 text-left font-bold uppercase tracking-wider">Descrição2</th>
                         <th class="px-4 py-3 w-1/12 text-left font-bold uppercase tracking-wider">Secundário</th>
-                        <th class="px-4 py-3 w-1/12 text-left font-bold uppercase tracking-wider">Localização</th>
-                        <th class="px-4 py-3 w-1/12 text-left font-bold uppercase tracking-wider">Diversa</th>
+                        <th class="px-4 py-3 w-1/12 text-left font-bold uppercase tracking-wider">Local</th>
                         <th class="px-4 py-3 w-1/12 text-left font-bold uppercase tracking-wider">Preço</th>
+                        <th class="px-4 py-3 w-1/12 text-left font-bold uppercase tracking-wider">Estoque</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-200 text-gray-700" wire:loading.class.delay="opacity-50">
+                <tbody class="divide-y divide-gray-200 text-gray-700 font-semibold text-lg" wire:loading.class.delay="opacity-50">
                     @forelse ($produtos as $produto)
-                    <tr class="hover:bg-blue-50 transition-colors">
+                    <tr class="hover:bg-blue-200 transition-colors">
                         <td class="px-4 py-2 ">{{ $produto->codigo }}</td>
                         <td class="px-4 py-2">{{ $produto->original ?? '' }}</td>
                         <td class="px-4 py-2 font-semibold">{{ $produto->descricao ?? '' }}</td>
                         <td class="px-4 py-2">{{ $produto->descricao2 ?? '' }}</td>
                         <td class="px-4 py-2">{{ $produto->secundario ?? '' }}</td>
                         <td class="px-4 py-2">{{ $produto->localizacao ?? '' }}</td>
-                        <td class="px-4 py-2">{{ $produto->diversa ?? '' }}</td>
-                        <td class="px-4 py-2">
+                        <td class="px-4 py-2 font-semibold {{ ($produto->preco ?? 0) == 0 ? 'text-red-600' : 'text-green-600' }}">
                             R$ {{ number_format($produto->preco ?? 0, 2, ',', '.') }}
                         </td>
+                        <td class="px-4 py-2 font-semibold">{{ $produto->estoque ?? '' }}</td>
                     </tr>
                     @empty
                     <tr>

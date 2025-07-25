@@ -34,7 +34,7 @@
         </nav>
     </header>
 
-    <main class="px-4 sm:px-6 lg:px-8 py-2 overflow-y-hidden">
+    <main class="px-2 py-2 overflow-y-hidden">
         {{ $slot }}
     </main>
     
