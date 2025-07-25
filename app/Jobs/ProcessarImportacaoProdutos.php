@@ -9,26 +9,31 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use App\Models\Produto;
 use League\Csv\Reader;
+use Illuminate\Support\Facades\Storage;
 
 class ProcessarImportacaoProdutos implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $caminhoArquivo;
+    protected string $path;
 
-    public function __construct(string $caminhoArquivo)
+    public function __construct(string $path)
     {
-        $this->caminhoArquivo = $caminhoArquivo;
+        $this->path = $path;
     }
 
     public function handle(): void
     {
-        if (!file_exists($this->caminhoArquivo)) {
-            //Log::error("Arquivo não encontrado para importação: " . $this->caminhoArquivo);
+        $fullPath = Storage::path($this->path);
+
+        echo "Verificando existência do arquivo em: $fullPath\n";
+
+        if (!file_exists($fullPath)) {
+            echo "Arquivo não encontrado para importação: $fullPath\n";
             return;
         }
 
-        $csv = Reader::createFromPath($this->caminhoArquivo, 'r');
+        $csv = Reader::createFromPath($fullPath, 'r');
         $csv->setHeaderOffset(0);
         $csv->setDelimiter(';');
 
@@ -64,6 +69,6 @@ class ProcessarImportacaoProdutos implements ShouldQueue
         }
 
         // Remove o arquivo após o processamento
-        unlink($this->caminhoArquivo);
+        unlink($fullPath);
     }
 }
