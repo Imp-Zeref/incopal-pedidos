@@ -13,6 +13,9 @@ return [
     | a conventional file to locate the various service credentials.
     |
     */
+    'melhor_envio' => [
+        'token' => env('MELHOR_ENVIO_API_TOKEN'),
+    ],
 
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),

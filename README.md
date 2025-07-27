@@ -18,3 +18,9 @@ php artisan view:clear
 php artisan config:clear
 php artisan route:clear
 php artisan cache:clear
+
+
+Para rodar o projeto:
+
+npm run build
+php artisan serve + outro terminal rodando: php artisan queue:work
