@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\BlocoNotas;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 
 class User extends Authenticatable
 {
@@ -35,5 +38,10 @@ class User extends Authenticatable
     public function tipoUsuario(): BelongsTo
     {
         return $this->belongsTo(TipoUsuario::class, 'fk_tipo_usuario');
+    }
+
+    public function blocoNotas(): HasMany
+    {
+        return $this->hasMany(BlocoNotas::class, 'user_id');
     }
 }

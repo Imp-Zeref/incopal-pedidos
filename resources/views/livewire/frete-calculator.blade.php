@@ -7,31 +7,31 @@
                 <div class="space-y-4">
                     <div>
                         <label for="cepOrigem" class="block text-sm font-medium text-gray-600 mb-1">CEP de Origem</label>
-                        <input type="text" id="cepOrigem" wire:model="cepOrigem" placeholder="Apenas números" class="w-full border-gray-300 rounded-lg shadow-sm">
+                        <input type="text" id="cepOrigem" wire:model="cepOrigem" placeholder="Apenas números" class="p-2 border w-full border-gray-300 rounded-lg shadow-sm">
                         @error('cepOrigem') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
                     <div>
                         <label for="cepDestino" class="block text-sm font-medium text-gray-600 mb-1">CEP de Destino</label>
-                        <input type="text" id="cepDestino" wire:model="cepDestino" placeholder="Apenas números" class="w-full border-gray-300 rounded-lg shadow-sm">
+                        <input type="text" id="cepDestino" wire:model="cepDestino" placeholder="Apenas números" class="p-2 border w-full border-gray-300 rounded-lg shadow-sm">
                         @error('cepDestino') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
                     <div>
                         <label for="peso" class="block text-sm font-medium text-gray-600 mb-1">Peso (kg)</label>
-                        <input type="number" step="0.1" id="peso" wire:model="peso" class="w-full border-gray-300 rounded-lg shadow-sm">
+                        <input type="number" step="0.1" id="peso" wire:model="peso" class="p-2 border w-full border-gray-300 rounded-lg shadow-sm">
                         @error('peso') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
                     <div class="grid grid-cols-3 gap-2">
                         <div>
                             <label for="altura" class="block text-sm font-medium text-gray-600 mb-1">Altura (cm)</label>
-                            <input type="number" id="altura" wire:model="altura" class="w-full border-gray-300 rounded-lg shadow-sm">
+                            <input type="number" id="altura" wire:model="altura" class="p-2 border w-full border-gray-300 rounded-lg shadow-sm">
                         </div>
                         <div>
                             <label for="largura" class="block text-sm font-medium text-gray-600 mb-1">Largura (cm)</label>
-                            <input type="number" id="largura" wire:model="largura" class="w-full border-gray-300 rounded-lg shadow-sm">
+                            <input type="number" id="largura" wire:model="largura" class="p-2 border w-full border-gray-300 rounded-lg shadow-sm">
                         </div>
                         <div>
                             <label for="comprimento" class="block text-sm font-medium text-gray-600 mb-1">Comp. (cm)</label>
-                            <input type="number" id="comprimento" wire:model="comprimento" class="w-full border-gray-300 rounded-lg shadow-sm">
+                            <input type="number" id="comprimento" wire:model="comprimento" class="p-2 border w-full border-gray-300 rounded-lg shadow-sm">
                         </div>
                     </div>
                 </div>

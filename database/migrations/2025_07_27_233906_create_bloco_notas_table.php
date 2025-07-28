@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('fornecedores', function (Blueprint $table) {
+        Schema::create('bloco_notas', function (Blueprint $table) {
             $table->id();
-            $table->string('nome');
-            $table->string('nome_fantasia')->nullable();
+            $table->foreignId('user_id')->constrained('usuarios')->cascadeOnDelete();
+            $table->string('titulo')->default('Minha Anotação');
+            $table->string('nome_cliente')->nullable();
+            $table->text('anotacoes')->nullable();
             $table->timestamps();
         });
     }
@@ -24,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('fornecedores');
+        Schema::dropIfExists('bloco_notas');
     }
 };

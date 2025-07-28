@@ -6,9 +6,7 @@
     <h1 class="text-2xl font-bold mb-6">Importar e Atualizar Produtos via CSV</h1>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {{-- Formulário de Importação --}}
         <div class="bg-white p-8 rounded-lg shadow-md">
-            {{-- Mensagem de Sucesso --}}
             @if (session('sucesso'))
             <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
                 <span class="block sm:inline">{{ session('sucesso') }}</span>
@@ -39,9 +37,7 @@
             </form>
         </div>
 
-        {{-- Status dos Processos e Falhas --}}
         <div class="bg-white p-6 rounded-lg shadow-md flex flex-col space-y-4">
-            {{-- Status atual dos jobs --}}
             <div class="mb-4 p-4 bg-white shadow-md rounded-lg">
                 @if($jobsPendentes > 0)
                 <p class="text-yellow-600 font-semibold">Processo em andamento...</p>
@@ -49,8 +45,6 @@
                 <p class="text-gray-600">Nenhum processo ativo.</p>
                 @endif
             </div>
-
-            {{-- Logs de falha --}}
             <div>
                 <h2 class="text-lg font-semibold text-gray-800 mb-2">Falhas Recentes</h2>
 

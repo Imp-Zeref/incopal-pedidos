@@ -1,5 +1,4 @@
 <div>
-    {{-- BARRA DE FILTROS E PESQUISA --}}
     <div class="flex bg-white p-4 rounded-xl space-x-10 shadow-lg mb-2 flex-row">
         <input wire:model.live.debounce.300ms="search" type="text" placeholder="Pesquisar por código, nome, descrição, aplicação..."
             class="w-1/2 bg-gray-200 border-gray-400 rounded-lg shadow-md py-3 px-4 text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
@@ -10,8 +9,6 @@
             </label>
         </div>
     </div>
-
-    {{-- TABELA DE PRODUTOS --}}
     <div class="bg-white rounded-xl shadow-lg overflow-hidden">
         <div class="overflow-y-auto" style="max-height: 75vh;">
             <table class="min-w-full text-sm">
@@ -65,8 +62,6 @@
                     @endforelse
                 </tbody>
             </table>
-
-            {{-- GATILHO DE CARREGAMENTO AUTOMÁTICO --}}
             @if(count($produtos) < $totalProducts)
                 <div x-data="{
                     init() {

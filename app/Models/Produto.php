@@ -32,9 +32,4 @@ class Produto extends Model
     protected $casts = [
         'codigo' => 'string',
     ];
-
-    public function pedidos(): BelongsToMany
-    {
-        return $this->belongsToMany(Pedido::class, 'lista_produtos', 'fk_produto', 'fk_pedido');
-    }
 }

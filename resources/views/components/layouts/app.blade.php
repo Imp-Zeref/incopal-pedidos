@@ -25,10 +25,10 @@
             </div>
             <div class="space-x-4 flex items-center">
                 @auth
+                    <a href="{{ route('bloco-notas.index') }}" class="text-gray-600 hover:text-blue-600 font-medium">Bloco
+                        de Notas</a>
                     <a href="{{ route('ferramentas.frete') }}"
                         class="text-gray-600 hover:text-blue-600 font-medium">Calcular Frete</a>
-                    <a href="{{ route('pedidos.index') }}" class="text-gray-600 hover:text-blue-600 font-medium">Meus
-                        Pedidos</a>
                     @if (auth()->user()->tipoUsuario->nome === 'Administrador')
                         <a href="{{ route('import.produtos.form') }}"
                             class="text-gray-600 hover:text-blue-600 font-medium">Importar Produtos</a>
