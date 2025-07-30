@@ -10,7 +10,8 @@
             Novo Pedido
         </a>
     </div>
-
+ 
+    
     <div class="bg-white p-6 rounded-lg shadow-md">
         <div class="overflow-x-auto">
             <table class="min-w-full">
